@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: stealth_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - backend
+
+  shadowsocks:
+    image: shadowsocks/shadowsocks-libev
+    container_name: stealth_ss
+    ports:
+      - "8388:8388"
+    command: ss-server -p 8388 -k "supersecret" -m aes-256-gcm
+    restart: unless-stopped
+
+  backend:
+    image: httpd:alpine
+    container_name: stealth_backend
+    restart: always
+
+  # Optional: Tor relay
+  tor:
+    image: goldy/tor-hidden-service
+    container_name: stealth_tor
+    environment:
+      VIRTUAL_PORT: 80
+    volumes:
+      - ./torrc:/etc/tor/torrc
