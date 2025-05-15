@@ -20,7 +20,7 @@
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/yourname/VeilCircuit.git
+   git clone https://github.com/xosski/Codename-VeilCircuit.git
    cd VeilCircuit
 2. Spin up the stack:
 docker-compose up -d
